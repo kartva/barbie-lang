@@ -16,6 +16,85 @@ import './index.css';
 Blockly.common.defineBlocks(blocks);
 Object.assign(javascriptGenerator.forBlock, forBlock);
 
+// Custom Sparkle Mutator Icon - replaces the gear icon with sparkles
+class SparkleMutatorIcon extends Blockly.icons.MutatorIcon {
+  initView(pointerdownListener) {
+    if (this.svgRoot) return;
+    super.initView(pointerdownListener);
+
+    // Remove the default gear icon elements
+    while (this.svgRoot.firstChild) {
+      this.svgRoot.removeChild(this.svgRoot.firstChild);
+    }
+
+    // Add a pink background circle
+    Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.CIRCLE,
+      {
+        class: 'blocklyIconShape',
+        r: '8',
+        cx: '8',
+        cy: '8',
+        fill: '#FF69B4',
+      },
+      this.svgRoot
+    );
+
+    // Add the sparkles icon (scaled down from 24x24 to fit 16x16)
+    const sparklesGroup = Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.G,
+      {
+        transform: 'scale(0.6) translate(1, 1)',
+      },
+      this.svgRoot
+    );
+
+    // Main sparkle shape
+    Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
+      {
+        d: 'M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z',
+        fill: 'white',
+        stroke: 'none',
+      },
+      sparklesGroup
+    );
+
+    // Small cross sparkle (top right)
+    Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.PATH,
+      {
+        d: 'M20 2v4M22 4h-4',
+        fill: 'none',
+        stroke: 'white',
+        'stroke-width': '2',
+        'stroke-linecap': 'round',
+      },
+      sparklesGroup
+    );
+
+    // Small circle sparkle (bottom left)
+    Blockly.utils.dom.createSvgElement(
+      Blockly.utils.Svg.CIRCLE,
+      {
+        cx: '4',
+        cy: '20',
+        r: '2',
+        fill: 'white',
+      },
+      sparklesGroup
+    );
+  }
+}
+
+// Register the custom sparkle icon to replace the default mutator icon
+Blockly.registry.register(
+  Blockly.registry.Type.ICON,
+  Blockly.icons.MutatorIcon.TYPE.toString(),
+  SparkleMutatorIcon,
+  true
+);
+
 // Rename "if" block to "feel" block
 Blockly.Msg['CONTROLS_IF_MSG_IF'] = 'feel';
 Blockly.Msg['CONTROLS_IF_MSG_ELSEIF'] = 'else feel';
@@ -71,17 +150,17 @@ Blockly.Themes.Barbie = Blockly.Theme.defineTheme('barbie', {
     procedure_category: {colour: '#DE3163'},
   },
   componentStyles: {
-    // workspaceBackgroundColour: '#FFF0F5',
-    // toolboxBackgroundColour: '#FFB6C1',
-    // toolboxForegroundColour: '#FFFFFF',
-    // flyoutBackgroundColour: '#FFC0CB',
-    // flyoutForegroundColour: '#FFFFFF',
-    // flyoutOpacity: 0.9,
-    // scrollbarColour: '#FF69B4',
-    // scrollbarOpacity: 0.6,
-    // insertionMarkerColour: '#FF1493',
-    // insertionMarkerOpacity: 0.5,
-    // cursorColour: '#FF69B4',
+    workspaceBackgroundColour: '#FFF0F5',
+    toolboxBackgroundColour: '#FFB6C1',
+    toolboxForegroundColour: '#FFFFFF',
+    flyoutBackgroundColour: '#FFC0CB',
+    flyoutForegroundColour: '#FFFFFF',
+    flyoutOpacity: 0.9,
+    scrollbarColour: '#FF69B4',
+    scrollbarOpacity: 0.6,
+    insertionMarkerColour: '#FF1493',
+    insertionMarkerOpacity: 0.5,
+    cursorColour: '#FF69B4',
   },
 });
 
