@@ -16,11 +16,80 @@ import './index.css';
 Blockly.common.defineBlocks(blocks);
 Object.assign(javascriptGenerator.forBlock, forBlock);
 
+// Rename "if" block to "feel" block
+Blockly.Msg['CONTROLS_IF_MSG_IF'] = 'feel';
+Blockly.Msg['CONTROLS_IF_MSG_ELSEIF'] = 'else feel';
+Blockly.Msg['CONTROLS_IF_MSG_THEN'] = 'then';
+
+// Define Barbie theme with pink colors
+Blockly.Themes.Barbie = Blockly.Theme.defineTheme('barbie', {
+  base: Blockly.Themes.Classic,
+  blockStyles: {
+    logic_blocks: {
+      colourPrimary: '#FF69B4',
+      colourSecondary: '#FFB6C1',
+      colourTertiary: '#FFC0CB',
+    },
+    loop_blocks: {
+      colourPrimary: '#FF1493',
+      colourSecondary: '#FF69B4',
+      colourTertiary: '#FFB6C1',
+    },
+    math_blocks: {
+      colourPrimary: '#DB7093',
+      colourSecondary: '#FFB6C1',
+      colourTertiary: '#FFC0CB',
+    },
+    text_blocks: {
+      colourPrimary: '#C71585',
+      colourSecondary: '#FF69B4',
+      colourTertiary: '#FFB6C1',
+    },
+    list_blocks: {
+      colourPrimary: '#FF85A2',
+      colourSecondary: '#FFB6C1',
+      colourTertiary: '#FFC0CB',
+    },
+    variable_blocks: {
+      colourPrimary: '#E75480',
+      colourSecondary: '#FF69B4',
+      colourTertiary: '#FFB6C1',
+    },
+    procedure_blocks: {
+      colourPrimary: '#DE3163',
+      colourSecondary: '#FF69B4',
+      colourTertiary: '#FFB6C1',
+    },
+  },
+  categoryStyles: {
+    logic_category: {colour: '#FF69B4'},
+    loop_category: {colour: '#FF1493'},
+    math_category: {colour: '#DB7093'},
+    text_category: {colour: '#C71585'},
+    list_category: {colour: '#FF85A2'},
+    variable_category: {colour: '#E75480'},
+    procedure_category: {colour: '#DE3163'},
+  },
+  componentStyles: {
+    workspaceBackgroundColour: '#FFF0F5',
+    toolboxBackgroundColour: '#FFB6C1',
+    toolboxForegroundColour: '#FFFFFF',
+    flyoutBackgroundColour: '#FFC0CB',
+    flyoutForegroundColour: '#FFFFFF',
+    flyoutOpacity: 0.9,
+    scrollbarColour: '#FF69B4',
+    scrollbarOpacity: 0.6,
+    insertionMarkerColour: '#FF1493',
+    insertionMarkerOpacity: 0.5,
+    cursorColour: '#FF69B4',
+  },
+});
+
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
 const outputDiv = document.getElementById('output');
 const blocklyDiv = document.getElementById('blocklyDiv');
-const ws = Blockly.inject(blocklyDiv, {toolbox});
+const ws = Blockly.inject(blocklyDiv, {toolbox, theme: Blockly.Themes.Barbie});
 
 // This function resets the code and output divs, shows the
 // generated code from the workspace, and evals the code.
