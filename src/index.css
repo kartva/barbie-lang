@@ -9,7 +9,7 @@ body {
 }
 
 /* Define the pink gradient SVG pattern */
-#blocklyDiv svg {
+svg.blocklySvg {
   background: linear-gradient(135deg, #FFF0F5 0%, #FFB6C1 50%, #FF69B4 100%);
 }
 
