@@ -12,11 +12,20 @@ body {
 /* Barbie-themed workspace background gradient */
 .blocklyMainBackground {
   fill: url(#barbieGradient) !important;
+  height: 100%;
+  overflow: auto;
+  padding: 1rem;
+  margin: 1rem;
 }
 
 /* Define the pink gradient SVG pattern */
 svg.blocklySvg {
   background: linear-gradient(135deg, #FFF0F5 0%, #FFB6C1 50%, #FF69B4 100%);
+}
+
+/* Apply Bartex font to block text */
+.blocklyText {
+  font-family: 'Bartex', sans-serif !important;
 }
 
 pre,
@@ -43,14 +52,16 @@ code {
   flex-direction: column;
   width: 400px;
   flex: 0 0 400px;
+  height: 100%;
   overflow: auto;
-  margin: 1rem;
+  padding: 1rem;
   font-family: 'Bartex', sans-serif;
 }
 
 #generatedCode {
-  height: 50%;
+  flex: 1;
   background-color: rgb(247, 240, 228);
+  overflow: auto;
 }
 
 #runButton {
@@ -78,5 +89,6 @@ code {
 }
 
 #output {
-  height: 50%;
+  flex: 0;
+  display: none;
 }

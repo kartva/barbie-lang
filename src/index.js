@@ -163,6 +163,42 @@ const outputDiv = document.getElementById('output');
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {toolbox, theme: Blockly.Themes.Barbie});
 
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    const currentScale = ws.getScale();
+    if (e.key === '+' || e.key === '=') {
+      e.preventDefault();
+      ws.setScale(currentScale * 1.2);
+    }
+    if (e.key === '-') {
+      e.preventDefault();
+      ws.setScale(currentScale / 1.2);
+    }
+    if (e.key === '0') {
+      e.preventDefault();
+      ws.setScale(1);
+    }
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey) {
+    const currentScale = ws.getScale();
+    if (e.key === '+' || e.key === '=') {
+      e.preventDefault();
+      ws.setScale(currentScale * 1.2);
+    }
+    if (e.key === '-') {
+      e.preventDefault();
+      ws.setScale(currentScale / 1.2);
+    }
+    if (e.key === '0') {
+      e.preventDefault();
+      ws.setScale(1);
+    }
+  }
+});
+
 // This function updates the code div to show the generated code.
 const updateCode = () => {
   const code = javascriptGenerator.workspaceToCode(ws);
@@ -209,3 +245,4 @@ ws.addChangeListener((e) => {
   }
   updateCode();
 });
+
