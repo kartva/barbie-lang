@@ -86,10 +86,12 @@ Blockly.icons.MutatorIcon.prototype.initView = function (pointerdownListener) {
   );
 };
 
-// Rename "if" block to "feel" block
 Blockly.Msg['CONTROLS_IF_MSG_IF'] = 'feel';
-Blockly.Msg['CONTROLS_IF_MSG_ELSEIF'] = 'else feel';
+Blockly.Msg['CONTROLS_IF_MSG_ELSEIF'] = 'otherwise';
 Blockly.Msg['CONTROLS_IF_MSG_THEN'] = 'then';
+Blockly.Msg['CONTROLS_IF_IF_TITLE_IF'] = 'feel';
+Blockly.Msg['CONTROLS_IF_ELSEIF_TITLE_ELSEIF'] = 'otherwise';
+Blockly.Msg['CONTROLS_IF_ELSE_TITLE_ELSE'] = 'otherwise';
 
 // Define Barbie theme with pink colors
 Blockly.Themes.Barbie = Blockly.Theme.defineTheme('barbie', {
