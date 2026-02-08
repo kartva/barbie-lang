@@ -42,7 +42,7 @@ code {
   display: flex;
   width: 100%;
   max-width: 100vw;
-  height: 100vh;
+  height: 98vh;
 }
 
 #blocklyDiv {
@@ -73,6 +73,7 @@ code {
   flex: 1;
   background-color: rgb(255, 173, 221);
   overflow: auto;
+  padding: 10pt
 }
 
 #runButton {
