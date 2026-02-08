@@ -12,22 +12,22 @@ dream merge(left, right):
       result = result + temp
       j = j + 1
   feel i < len(left):
-    temp = left[i:len(left) - 1]
+    temp = left[i:len(left)]
     result = result + temp
   else:
-    temp = right[j:len(right) - 1]
+    temp = right[j:len(right)]
     result = result + temp
   gift result
 
 
 dream mergesort(ls):
-  feel len(ls) < 2:
-    gift ls
-  mid = len(ls) / 2
-  x = mergesort(ls[mid:len(ls) - 1])
-  y = mergesort(ls[0:mid])
-  gift merge(x, y)
+   feel len(ls) < 2:
+     gift ls
+   mid = len(ls) / 2
+   x = mergesort(ls[mid:len(ls)])
+   y = mergesort(ls[0:mid])
+   gift merge(x, y)
 
 
 
-Ken.say(merge([4, 2, 9], [1, 0, 3]))
+Ken.say(mergesort([4, 2, 9, 1, 0, 3]))

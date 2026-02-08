@@ -227,22 +227,40 @@ barbieGenerator.forBlock['lists_getSublist'] = function(block) {
   const list = barbieGenerator.valueToCode(block, 'LIST',
       barbieGenerator.Order.MEMBER) || '[]';
   
-  // Handle AT1 with "from start" option
+  // Handle AT1 with "from start" or "from end" option
   let at1;
-  if (block.getField('WHERE1').getValue() === 'FROM_START') {
-    at1 = barbieGenerator.valueToCode(block, 'AT1',
-        barbieGenerator.Order.NONE) || '0';
+  const where1 = block.getField('WHERE1').getValue();
+  const at1Val = barbieGenerator.valueToCode(block, 'AT1', barbieGenerator.Order.NONE);
+  
+  if (where1 === 'FIRST') {
+    at1 = '0';
+  } else if (at1Val) {
+    // If AT1 has a value, use it
+    at1 = at1Val;
+  } else if (where1 === 'FROM_END') {
+    // FROM_END: subtract from length
+    at1 = 'len(' + list + ') - 1';
   } else {
     at1 = '0';
   }
   
-  // Handle AT2 with "to end" option
+  // Handle AT2 with "to end" or "to start" option
   let at2;
-  if (block.getField('WHERE2').getValue() === 'TO_END') {
+  const where2 = block.getField('WHERE2').getValue();
+  const at2Val = barbieGenerator.valueToCode(block, 'AT2', barbieGenerator.Order.NONE);
+  
+  if (where2 === 'TO_END') {
     at2 = '';
+  } else if (where2 === 'LAST') {
+    at2 = 'len(' + list + ')';
+  } else if (at2Val) {
+    // If AT2 has a value, use it
+    at2 = at2Val;
+  } else if (where2 === 'TO_FROM_END') {
+    // TO_FROM_END: subtract from length
+    at2 = 'len(' + list + ') - 1';
   } else {
-    at2 = barbieGenerator.valueToCode(block, 'AT2',
-        barbieGenerator.Order.NONE) || 'len(' + list + ') - 1';
+    at2 = 'len(' + list + ')';
   }
   
   const code = list + '[' + at1 + ':' + at2 + ']';
