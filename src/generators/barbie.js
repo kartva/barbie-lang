@@ -193,10 +193,13 @@ barbieGenerator.forBlock['controls_repeat'] = barbieGenerator.forBlock['controls
 
 barbieGenerator.forBlock['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  const elements = new Array(block.itemCount_);
+  const elements = [];
   for (let i = 0; i < block.itemCount_; i++) {
-    elements[i] = barbieGenerator.valueToCode(block, 'ADD' + i,
-        barbieGenerator.Order.NONE) || 'None';
+    const value = barbieGenerator.valueToCode(block, 'ADD' + i,
+        barbieGenerator.Order.NONE);
+    if (value) {
+      elements.push(value);
+    }
   }
   const code = '[' + elements.join(', ') + ']';
   return [code, barbieGenerator.Order.COLLECTION];
