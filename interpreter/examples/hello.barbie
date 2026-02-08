@@ -1,0 +1,16 @@
+Ken.say("Welcome to Barbie World!")
+
+x = 5
+feel x > 3:
+  Ken.say("x is fabulous!")
+else:
+  Ken.say("x needs more sparkle")
+
+Ken.say("Counting on the runway:")
+strut i in runway(5):
+  Ken.say(i)
+
+Ken.say("glitter is:")
+Ken.say(glitter)
+Ken.say("dust is:")
+Ken.say(dust)
