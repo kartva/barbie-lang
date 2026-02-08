@@ -28,6 +28,13 @@ const config = {
         generator: {
           filename: 'fonts/[name][ext]',
         },
+      },
+      {
+        test: /\.png$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'images/[name][ext]',
+        },
       }
     ],
   },
