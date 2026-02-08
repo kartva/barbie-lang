@@ -61,4 +61,19 @@ let () =
     "x = 0\nkeepgoing x < 5:\n  Ken.say(x)\n  x = x + 1\n  feel x == 3:\n    kenough\n"
     ["0"; "1"; "2"];
 
+  (* Functions and Recursion *)
+  test "recursive factorial"
+    "dream fact(n):\n  feel n <= 1:\n    gift 1\n  gift n * fact(n - 1)\nKen.say(fact(5))\n"
+    ["120"];
+
+  (* Lists and Slicing *)
+  test "list operations"
+    "l = [1, 2, 3]\nKen.say(l[1])\nKen.say(l[0:2])\nKen.say(len(l))\n"
+    ["2"; "[1, 2]"; "3"];
+
+  (* Logical operators *)
+  test "logical and/or"
+    "Ken.say(glitter and dust)\nKen.say(glitter or dust)\nKen.say(not dust)\n"
+    ["dust"; "glitter"; "glitter"];
+
   Printf.printf "\nAll tests passed!\n"

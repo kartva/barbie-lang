@@ -1,0 +1,34 @@
+dream merge(left, right):
+  result = []
+  i = 0
+  j = 0
+  keepgoing i < len(left) and j < len(right):
+    feel left[i] <= right[j]:
+      result = result + [left[i]]
+      i = i + 1
+    else:
+      result = result + [right[j]]
+      j = j + 1
+  
+  feel i < len(left):
+    result = result + left[i:len(left)]
+  feel j < len(right):
+    result = result + right[j:len(right)]
+    
+  gift result
+
+dream mergesort(arr):
+  feel len(arr) <= 1:
+    gift arr
+  
+  mid = len(arr) / 2
+  
+  left = mergesort(arr[0:mid])
+  right = mergesort(arr[mid:len(arr)])
+  
+  gift merge(left, right)
+
+# Test it
+numbers = [38, 27, 43, 3, 9, 82, 10]
+sorted_numbers = mergesort(numbers)
+Ken.say("Sorted:", sorted_numbers)

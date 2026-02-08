@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Base config that applies to either development or production mode.
@@ -9,6 +10,20 @@ const config = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+  },
+  resolve: {
+    fallback: {
+      "fs": false,
+      "child_process": false,
+      "tty": false,
+      "util": false,
+      "os": false,
+      "path": false,
+      "node:fs": false,
+      "node:child_process": false,
+      "node:tty": false,
+      "node:util": false,
+    }
   },
   // Enable webpack-dev-server to get hot refresh of the app.
   devServer: {
@@ -39,6 +54,9 @@ const config = {
     ],
   },
   plugins: [
+    new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+      resource.request = resource.request.replace(/^node:/, "");
+    }),
     // Generate the HTML index page based on our template.
     // This will output the same index page with the bundle we
     // created above added in a script tag.

@@ -6,13 +6,13 @@
 
 import * as Blockly from 'blockly';
 import {blocks} from './blocks/text';
-import {forBlock} from './generators/javascript';
-import {javascriptGenerator} from 'blockly/javascript';
+import {barbieGenerator} from './generators/barbie';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 import './index.css';
 import barbieHead from '../public/barbie-head.png';
 import splashImage from '../public/splash-screen.png';
+import './barbie_interpreter';
 
 document.getElementById('barbie-head').src = barbieHead;
 document.getElementById('splash-logo').src = splashImage;
@@ -26,7 +26,37 @@ setTimeout(() => {
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
-Object.assign(javascriptGenerator.forBlock, forBlock);
+
+Blockly.common.defineBlocks({
+  'controls_strut': {
+    'init': function() {
+      this.appendValueInput('TIMES')
+          .setCheck('Number')
+          .appendField('strut')
+          .appendField(new Blockly.FieldVariable('i'), 'VAR')
+          .appendField('in runway(');
+      this.appendDummyInput()
+          .appendField(')');
+      this.appendStatementInput('DO')
+          .appendField('do');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(Blockly.Msg['LOOPS_HUE'] || '#FF1493');
+      this.setTooltip('Loop with a variable from 0 to N-1');
+    }
+  }
+});
+
+barbieGenerator.forBlock['controls_strut'] = function(block) {
+  const repeats = barbieGenerator.valueToCode(block, 'TIMES',
+      barbieGenerator.Order.NONE) || '0';
+  const variable = barbieGenerator.nameDB_.getName(block.getFieldValue('VAR'),
+      Blockly.VARIABLE_CATEGORY_NAME);
+  let branch = barbieGenerator.statementToCode(block, 'DO');
+  branch = barbieGenerator.addLoopTrap(branch, block) || barbieGenerator.PASS;
+  return 'strut ' + variable + ' in runway(' + repeats + '):\n' + branch;
+};
 
 // Monkey-patch MutatorIcon to replace the gear with sparkles
 const originalInitView = Blockly.icons.MutatorIcon.prototype.initView;
@@ -99,11 +129,26 @@ Blockly.icons.MutatorIcon.prototype.initView = function (pointerdownListener) {
 };
 
 Blockly.Msg['CONTROLS_IF_MSG_IF'] = 'feel';
-Blockly.Msg['CONTROLS_IF_MSG_ELSEIF'] = 'otherwise';
+Blockly.Msg['CONTROLS_IF_MSG_ELSEIF'] = 'otherwise feel';
 Blockly.Msg['CONTROLS_IF_MSG_THEN'] = 'then';
 Blockly.Msg['CONTROLS_IF_IF_TITLE_IF'] = 'feel';
-Blockly.Msg['CONTROLS_IF_ELSEIF_TITLE_ELSEIF'] = 'otherwise';
+Blockly.Msg['CONTROLS_IF_ELSEIF_TITLE_ELSEIF'] = 'otherwise feel';
 Blockly.Msg['CONTROLS_IF_ELSE_TITLE_ELSE'] = 'otherwise';
+
+Blockly.Msg['CONTROLS_WHILEUNTIL_OPERATOR_WHILE'] = 'keepgoing';
+Blockly.Msg['CONTROLS_REPEAT_TITLE'] = 'somanytimes %1';
+Blockly.Msg['CONTROLS_REPEAT_INPUT_DO'] = 'do';
+
+Blockly.Msg['PROCEDURES_DEFRETURN_TITLE'] = 'dream';
+Blockly.Msg['PROCEDURES_DEFRETURN_PROCEDURE'] = 'procedure';
+Blockly.Msg['PROCEDURES_DEFRETURN_DO'] = 'do';
+Blockly.Msg['PROCEDURES_DEFRETURN_RETURN'] = 'gift';
+Blockly.Msg['PROCEDURES_DEFNORETURN_TITLE'] = 'dream';
+Blockly.Msg['PROCEDURES_DEFNORETURN_PROCEDURE'] = 'procedure';
+Blockly.Msg['PROCEDURES_DEFNORETURN_DO'] = 'do';
+Blockly.Msg['PROCEDURES_IFRETURN_TITLE'] = 'gift';
+
+Blockly.Msg['LISTS_CREATE_WITH_INPUT_WITH'] = 'list';
 
 // Define Barbie theme with pink colors
 Blockly.Themes.Barbie = Blockly.Theme.defineTheme('barbie', {
@@ -176,25 +221,43 @@ Blockly.Themes.Barbie = Blockly.Theme.defineTheme('barbie', {
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode').firstChild;
-const outputDiv = document.getElementById('output');
+const outputDiv = document.getElementById('barbie-bubble');
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {toolbox, theme: Blockly.Themes.Barbie});
 
 // This function updates the code div to show the generated code.
 const updateCode = () => {
-  const code = javascriptGenerator.workspaceToCode(ws);
+  const code = barbieGenerator.workspaceToCode(ws);
   codeDiv.innerText = code;
 };
 
 // This function executes the generated code and shows output.
 const runCode = () => {
-  const code = javascriptGenerator.workspaceToCode(ws);
+  const code = barbieGenerator.workspaceToCode(ws);
   outputDiv.innerHTML = '';
   try {
-    eval(code);
+    const result = window.BarbieInterpreter.run(code);
+    if (result.ok) {
+      const output = result.output;
+      if (Array.isArray(output) && output.length > 0) {
+        output.forEach(line => {
+          const p = document.createElement('p');
+          p.style.margin = '5px 0';
+          p.innerText = line;
+          outputDiv.appendChild(p);
+        });
+      } else {
+        outputDiv.innerText = '(No output)';
+      }
+    } else {
+      const errorP = document.createElement('p');
+      errorP.style.color = 'red';
+      errorP.style.fontWeight = 'bold';
+      errorP.innerText = result.error;
+      outputDiv.appendChild(errorP);
+    }
   } catch (error) {
-    console.error(error);
-    outputDiv.innerText = error.message;
+    outputDiv.innerText = 'Execution error: ' + error.message;
   }
 };
 

@@ -16,6 +16,14 @@ export const toolbox = {
         },
         {
           'kind': 'block',
+          'type': 'logic_operation'
+        },
+        {
+          'kind': 'block',
+          'type': 'logic_negate'
+        },
+        {
+          'kind': 'block',
           'type': 'logic_boolean'
         },
         {
@@ -36,6 +44,10 @@ export const toolbox = {
         {
           'kind': 'block',
           'type': 'controls_repeat_ext'
+        },
+        {
+          'kind': 'block',
+          'type': 'controls_strut'
         },
         {
           'kind': 'block',
@@ -75,18 +87,38 @@ export const toolbox = {
     },
     {
       'kind': 'category',
-      'name': 'Variables',
-      'categorystyle': 'variable_category',
+      'name': 'Lists',
+      'categorystyle': 'list_category',
       'contents': [
         {
           'kind': 'block',
-          'type': 'variables_set'
+          'type': 'lists_create_with'
         },
         {
           'kind': 'block',
-          'type': 'variables_get'
+          'type': 'lists_getIndex'
+        },
+        {
+          'kind': 'block',
+          'type': 'lists_getSublist'
+        },
+        {
+          'kind': 'block',
+          'type': 'lists_length'
         }
       ]
+    },
+    {
+      'kind': 'category',
+      'name': 'Variables',
+      'categorystyle': 'variable_category',
+      'custom': 'VARIABLE'
+    },
+    {
+      'kind': 'category',
+      'name': 'Functions',
+      'categorystyle': 'procedure_category',
+      'custom': 'PROCEDURE'
     }
   ]
 };

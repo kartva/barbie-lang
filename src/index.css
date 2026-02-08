@@ -203,11 +203,6 @@ code {
   transform: translateY(0);
 }
 
-#output {
-  flex: 0;
-  display: none;
-}
-
 #barbie-container {
   display: flex;
   flex-direction: column;
@@ -303,4 +298,48 @@ code {
 
 .blocklyWidgetDiv .blocklyContextMenu .blocklyMenuItemBorder {
   display: none;
+}
+
+/* Barbie Variable Dropdown Menu Theme */
+.blocklyDropDownContent {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  height: auto !important;
+}
+
+.blocklyDropDownContent .blocklyMenu {
+  background-color: #FFF0F5 !important;
+  border: 2px solid #FF69B4 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3) !important;
+  padding: 8px 0 !important;
+}
+
+.blocklyDropDownContent .blocklyMenu .blocklyMenuItem {
+  color: #C71585 !important;
+  font-family: 'Bartex', sans-serif !important;
+  font-size: 18px !important;
+  padding: 6px 16px !important;
+  transition: all 0.2s ease;
+}
+
+.blocklyDropDownContent .blocklyMenu .blocklyMenuItem:hover,
+.blocklyDropDownContent .blocklyMenu .blocklyMenuItem.blocklyMenuItemHover {
+  background-color: #FFB6C1 !important;
+  color: #FFFFFF !important;
+}
+
+.blocklyDropDownContent .blocklyMenu .blocklyMenuItemSelected {
+  background-color: #FFB6C1 !important;
+  color: #FFFFFF !important;
+}
+
+.blocklyDropDownContent .blocklyMenu .blocklyMenuItemCheckbox {
+  display: none !important;
+}
+
+.blocklyDropDownContent .blocklyMenu .blocklyMenuItemContent {
+  font-family: 'Bartex', sans-serif !important;
 }

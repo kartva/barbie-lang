@@ -83,13 +83,19 @@ let read_ident st =
   | "else" -> Token.ELSE
   | "keepgoing" -> Token.KEEPGOING
   | "strut" -> Token.STRUT
+  | "somanytimes" -> Token.SOMANYTIMES
   | "in" -> Token.IN
   | "runway" -> Token.RUNWAY
   | "kenough" -> Token.KENOUGH
   | "continue" -> Token.CONTINUE
   | "pass" -> Token.PASS
+  | "dream" -> Token.DREAM
+  | "gift" -> Token.GIFT
   | "glitter" -> Token.GLITTER
   | "dust" -> Token.DUST
+  | "and" -> Token.AND
+  | "or" -> Token.OR
+  | "not" -> Token.NOT
   | "None" -> Token.NONE
   | "Ken.say" -> Token.KEN_SAY
   | s -> Token.IDENT s
@@ -165,6 +171,8 @@ let rec next_token st =
       | '/' -> ignore (advance st); Token.SLASH
       | '(' -> ignore (advance st); Token.LPAREN
       | ')' -> ignore (advance st); Token.RPAREN
+      | '[' -> ignore (advance st); Token.LBRACKET
+      | ']' -> ignore (advance st); Token.RBRACKET
       | ':' -> ignore (advance st); Token.COLON
       | ',' -> ignore (advance st); Token.COMMA
       | '*' ->

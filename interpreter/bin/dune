@@ -1,3 +1,10 @@
 (executable
  (name main)
  (libraries barbie_lib))
+
+(executable
+ (name js_api)
+ (modes js)
+ (libraries barbie_lib js_of_ocaml)
+ (preprocess (pps js_of_ocaml-ppx))
+ (js_of_ocaml (flags --target=browser)))

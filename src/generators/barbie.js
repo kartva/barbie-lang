@@ -103,6 +103,8 @@ barbieGenerator.forBlock['text_print'] = function(block) {
   return 'Ken.say(' + msg + ')\n';
 };
 
+barbieGenerator.forBlock['add_text'] = barbieGenerator.forBlock['text_print'];
+
 barbieGenerator.forBlock['controls_if'] = function(block) {
   // If/elseif/else condition.
   let n = 0;
@@ -154,25 +156,150 @@ barbieGenerator.forBlock['controls_flow_statements'] = function(block) {
   }
 };
 
+barbieGenerator.forBlock['logic_operation'] = function(block) {
+  // Operations 'and', 'or'.
+  const operator = (block.getFieldValue('OP') === 'AND') ? 'and' : 'or';
+  const order = (operator === 'and') ? barbieGenerator.Order.LOGICAL_AND :
+      barbieGenerator.Order.LOGICAL_OR;
+  const argument0 = barbieGenerator.valueToCode(block, 'A', order) || 'dust';
+  const argument1 = barbieGenerator.valueToCode(block, 'B', order) || 'dust';
+  const code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
+};
+
+barbieGenerator.forBlock['logic_negate'] = function(block) {
+  // Negation.
+  const argument0 = barbieGenerator.valueToCode(block, 'BOOL',
+      barbieGenerator.Order.LOGICAL_NOT) || 'dust';
+  const code = 'not ' + argument0;
+  return [code, barbieGenerator.Order.LOGICAL_NOT];
+};
+
 barbieGenerator.forBlock['controls_repeat_ext'] = function(block) {
   // Repeat n times.
   let repeats;
   if (block.getField('TIMES')) {
-    // Internal number.
     repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
-    // External number.
     repeats = barbieGenerator.valueToCode(block, 'TIMES',
         barbieGenerator.Order.NONE) || '0';
   }
   let branch = barbieGenerator.statementToCode(block, 'DO');
   branch = barbieGenerator.addLoopTrap(branch, block) || barbieGenerator.PASS;
-  
-  // Create a loop variable
-  const variable = barbieGenerator.nameDB_.getDistinctName(
-    'count', Blockly.VARIABLE_CATEGORY_NAME);
+  return 'somanytimes ' + repeats + ':\n' + branch;
+};
 
-  return 'strut ' + variable + ' in runway(' + repeats + '):\n' + branch;
+barbieGenerator.forBlock['controls_repeat'] = barbieGenerator.forBlock['controls_repeat_ext'];
+
+barbieGenerator.forBlock['lists_create_with'] = function(block) {
+  // Create a list with any number of elements of any type.
+  const elements = new Array(block.itemCount_);
+  for (let i = 0; i < block.itemCount_; i++) {
+    elements[i] = barbieGenerator.valueToCode(block, 'ADD' + i,
+        barbieGenerator.Order.NONE) || 'None';
+  }
+  const code = '[' + elements.join(', ') + ']';
+  return [code, barbieGenerator.Order.COLLECTION];
+};
+
+barbieGenerator.forBlock['lists_getIndex'] = function(block) {
+  // Get element at index.
+  const list = barbieGenerator.valueToCode(block, 'VALUE',
+      barbieGenerator.Order.MEMBER) || '[]';
+  const at = barbieGenerator.valueToCode(block, 'AT',
+      barbieGenerator.Order.NONE) || '0';
+  const code = list + '[' + at + ']';
+  return [code, barbieGenerator.Order.MEMBER];
+};
+
+barbieGenerator.forBlock['lists_length'] = function(block) {
+  // String or list length.
+  const argument0 = barbieGenerator.valueToCode(block, 'VALUE',
+      barbieGenerator.Order.NONE) || '[]';
+  return ['len(' + argument0 + ')', barbieGenerator.Order.FUNCTION_CALL];
+};
+
+barbieGenerator.forBlock['lists_getSublist'] = function(block) {
+  // Get sublist.
+  const list = barbieGenerator.valueToCode(block, 'LIST',
+      barbieGenerator.Order.MEMBER) || '[]';
+  const at1 = barbieGenerator.valueToCode(block, 'AT1',
+      barbieGenerator.Order.NONE) || '0';
+  const at2 = barbieGenerator.valueToCode(block, 'AT2',
+      barbieGenerator.Order.NONE) || 'None';
+  const code = list + '[' + at1 + ':' + at2 + ']';
+  return [code, barbieGenerator.Order.MEMBER];
+};
+
+// Functions
+barbieGenerator.forBlock['procedures_defnoreturn'] = function(block) {
+  // Define a procedure with no return value.
+  const funcName = barbieGenerator.nameDB_.getName(block.getFieldValue('NAME'),
+      Blockly.PROCEDURE_CATEGORY_NAME);
+  let branch = barbieGenerator.statementToCode(block, 'STACK');
+  if (barbieGenerator.STATEMENT_PREFIX) {
+    branch = barbieGenerator.prefixLines(
+        barbieGenerator.STATEMENT_PREFIX.replace(/%1/g,
+        '\'' + block.id + '\''), barbieGenerator.INDENT) + branch;
+  }
+  if (barbieGenerator.INFINITE_LOOP_TRAP) {
+    branch = barbieGenerator.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + block.id + '\'') + branch;
+  }
+  const returnValue = barbieGenerator.valueToCode(block, 'RETURN',
+      barbieGenerator.Order.NONE) || '';
+  let returnStr = '';
+  if (returnValue) {
+    returnStr = barbieGenerator.INDENT + 'gift ' + returnValue + '\n';
+  }
+  const args = [];
+  for (let i = 0; i < block.arguments_.length; i++) {
+    args[i] = barbieGenerator.nameDB_.getName(block.arguments_[i],
+        Blockly.VARIABLE_CATEGORY_NAME);
+  }
+  let code = 'dream ' + funcName + '(' + args.join(', ') + '):\n' +
+      (branch || barbieGenerator.PASS) + returnStr;
+  code = barbieGenerator.scrub_(block, code);
+  barbieGenerator.definitions_['%' + funcName] = code;
+  return null;
+};
+
+barbieGenerator.forBlock['procedures_defreturn'] = barbieGenerator.forBlock['procedures_defnoreturn'];
+
+barbieGenerator.forBlock['procedures_callreturn'] = function(block) {
+  // Call a procedure with a return value.
+  const funcName = barbieGenerator.nameDB_.getName(block.getFieldValue('NAME'),
+      Blockly.PROCEDURE_CATEGORY_NAME);
+  const args = [];
+  for (let i = 0; i < block.arguments_.length; i++) {
+    args[i] = barbieGenerator.valueToCode(block, 'ARG' + i,
+        barbieGenerator.Order.NONE) || 'None';
+  }
+  const code = funcName + '(' + args.join(', ') + ')';
+  return [code, barbieGenerator.Order.FUNCTION_CALL];
+};
+
+barbieGenerator.forBlock['procedures_callnoreturn'] = function(block) {
+  // Call a procedure with no return value.
+  const funcName = barbieGenerator.nameDB_.getName(block.getFieldValue('NAME'),
+      Blockly.PROCEDURE_CATEGORY_NAME);
+  const args = [];
+  for (let i = 0; i < block.arguments_.length; i++) {
+    args[i] = barbieGenerator.valueToCode(block, 'ARG' + i,
+        barbieGenerator.Order.NONE) || 'None';
+  }
+  return funcName + '(' + args.join(', ') + ')\n';
+};
+
+barbieGenerator.forBlock['procedures_ifreturn'] = function(block) {
+  // Conditionally return value from a procedure.
+  const condition = barbieGenerator.valueToCode(block, 'CONDITION',
+      barbieGenerator.Order.NONE) || 'dust';
+  let code = 'feel ' + condition + ':\n';
+  const returnValue = barbieGenerator.valueToCode(block, 'VALUE',
+      barbieGenerator.Order.NONE) || 'None';
+  code += barbieGenerator.INDENT + 'gift ' + returnValue + '\n';
+  return code;
 };
 
 barbieGenerator.forBlock['math_arithmetic'] = function(block) {

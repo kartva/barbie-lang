@@ -16,11 +16,14 @@ type t =
   | ELSE
   | KEEPGOING        (* while *)
   | STRUT            (* for *)
+  | SOMANYTIMES      (* repeat *)
   | IN
   | RUNWAY           (* range *)
   | KENOUGH          (* break *)
   | CONTINUE
   | PASS
+  | DREAM            (* def *)
+  | GIFT             (* return *)
   | KEN_SAY          (* Ken.say *)
 
   (* Operators *)
@@ -35,11 +38,16 @@ type t =
   | LTE
   | GT
   | GTE
+  | AND
+  | OR
+  | NOT
   | ASSIGN           (* = *)
 
   (* Delimiters *)
   | LPAREN
   | RPAREN
+  | LBRACKET
+  | RBRACKET
   | COLON
   | COMMA
   | NEWLINE
@@ -60,11 +68,14 @@ let to_string = function
   | ELSE -> "ELSE"
   | KEEPGOING -> "KEEPGOING"
   | STRUT -> "STRUT"
+  | SOMANYTIMES -> "SOMANYTIMES"
   | IN -> "IN"
   | RUNWAY -> "RUNWAY"
   | KENOUGH -> "KENOUGH"
   | CONTINUE -> "CONTINUE"
   | PASS -> "PASS"
+  | DREAM -> "DREAM"
+  | GIFT -> "GIFT"
   | KEN_SAY -> "KEN_SAY"
   | PLUS -> "PLUS"
   | MINUS -> "MINUS"
@@ -77,9 +88,14 @@ let to_string = function
   | LTE -> "LTE"
   | GT -> "GT"
   | GTE -> "GTE"
+  | AND -> "AND"
+  | OR -> "OR"
+  | NOT -> "NOT"
   | ASSIGN -> "ASSIGN"
   | LPAREN -> "LPAREN"
   | RPAREN -> "RPAREN"
+  | LBRACKET -> "LBRACKET"
+  | RBRACKET -> "RBRACKET"
   | COLON -> "COLON"
   | COMMA -> "COMMA"
   | NEWLINE -> "NEWLINE"
