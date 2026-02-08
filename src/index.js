@@ -12,8 +12,17 @@ import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 import './index.css';
 import barbieHead from '../public/barbie-head.png';
+import splashImage from '../public/splash-screen.png';
 
 document.getElementById('barbie-head').src = barbieHead;
+document.getElementById('splash-logo').src = splashImage;
+
+// Splash screen: fade out after 4 seconds, then remove
+const splash = document.getElementById('splash-screen');
+setTimeout(() => {
+  splash.classList.add('fade-out');
+  splash.addEventListener('transitionend', () => splash.remove());
+}, 4000);
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);

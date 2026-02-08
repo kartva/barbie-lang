@@ -28,6 +28,37 @@ html {
   font-size: 16px;
 }
 
+/* Splash screen */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(224, 33, 138, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  transition: opacity 0.8s ease;
+}
+
+#splash-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#splash-logo {
+  max-width: 600px;
+  max-height: 600px;
+  animation: splashPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes splashPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
 body {
   margin: 1;
   max-width: 100vw;
@@ -64,7 +95,6 @@ body {
     opacity: 0;
     transform: scale(0.5);
   }
-  font-size: 16px;
 }
 
 /* Apply font to Blockly widgets and tooltips explicitly */
