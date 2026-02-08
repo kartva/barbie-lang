@@ -87,7 +87,7 @@ let read_ident st =
   | "in" -> Token.IN
   | "runway" -> Token.RUNWAY
   | "kenough" -> Token.KENOUGH
-  | "continue" -> Token.CONTINUE
+  | "kentinue" -> Token.KENTINUE
   | "pass" -> Token.PASS
   | "dream" -> Token.DREAM
   | "gift" -> Token.GIFT

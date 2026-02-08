@@ -20,7 +20,7 @@ type t =
   | IN
   | RUNWAY           (* range *)
   | KENOUGH          (* break *)
-  | CONTINUE
+  | KENTINUE         (* continue *)
   | PASS
   | DREAM            (* def *)
   | GIFT             (* return *)
@@ -72,7 +72,7 @@ let to_string = function
   | IN -> "IN"
   | RUNWAY -> "RUNWAY"
   | KENOUGH -> "KENOUGH"
-  | CONTINUE -> "CONTINUE"
+  | KENTINUE -> "KENTINUE"
   | PASS -> "PASS"
   | DREAM -> "DREAM"
   | GIFT -> "GIFT"

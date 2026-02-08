@@ -147,8 +147,12 @@ Blockly.Msg['PROCEDURES_DEFNORETURN_TITLE'] = 'dream';
 Blockly.Msg['PROCEDURES_DEFNORETURN_PROCEDURE'] = 'procedure';
 Blockly.Msg['PROCEDURES_DEFNORETURN_DO'] = 'do';
 Blockly.Msg['PROCEDURES_IFRETURN_TITLE'] = 'gift';
+Blockly.Msg['PROCEDURES_CALL_BEFORE_PARAMS'] = 'a dream with';
 
 Blockly.Msg['LISTS_CREATE_WITH_INPUT_WITH'] = 'list';
+
+Blockly.Msg['CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK'] = 'kenough';
+Blockly.Msg['CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE'] = 'kentinue';
 
 // Define Barbie theme with pink colors
 Blockly.Themes.Barbie = Blockly.Theme.defineTheme('barbie', {
@@ -314,33 +318,33 @@ ws.addChangeListener((e) => {
 function createGlitterBurst() {
   const blocklyDiv = document.getElementById('blocklyDiv');
   const rect = blocklyDiv.getBoundingClientRect();
-  
+
   // Position near bottom-right where trashcan typically is
   const centerX = rect.right - 80;
   const centerY = rect.bottom - 80;
-  
+
   // Create multiple glitter particles
   for (let i = 0; i < 51; i++) {
     const particle = document.createElement('div');
     particle.className = 'glitter-particle';
-    
+
     // Random angle and distance
     const angle = (Math.PI * 2 * i) / 51;
     const distance = 50 + Math.random() * 30;
     const endX = centerX + Math.cos(angle) * distance;
     const endY = centerY + Math.sin(angle) * distance;
-    
+
     // Set custom properties for animation
     particle.style.setProperty('--start-x', `${centerX}px`);
     particle.style.setProperty('--start-y', `${centerY}px`);
     particle.style.setProperty('--end-x', `${endX}px`);
     particle.style.setProperty('--end-y', `${endY}px`);
-    
+
     // Random delay for staggered effect
     particle.style.animationDelay = `${Math.random() * 0.1}s`;
-    
+
     document.body.appendChild(particle);
-    
+
     // Remove after animation
     setTimeout(() => {
       particle.remove();
@@ -352,8 +356,8 @@ function createGlitterBurst() {
 ws.addChangeListener((e) => {
   // Only trigger glitter for actual block deletions from the main workspace
   // Ignore flyout/toolbox deletions and other internal Blockly operations
-  if (e.type === Blockly.Events.BLOCK_DELETE && 
-      !e.isUiEvent && 
+  if (e.type === Blockly.Events.BLOCK_DELETE &&
+      !e.isUiEvent &&
       e.workspaceId === ws.id) {
     console.log('Block deleted from workspace! Creating glitter burst...');
     createGlitterBurst();

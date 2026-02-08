@@ -208,10 +208,10 @@ and parse_stmt st =
     ignore (advance st);
     skip_newlines st;
     Ast.Kenough
-  | Token.CONTINUE ->
+  | Token.KENTINUE ->
     ignore (advance st);
     skip_newlines st;
-    Ast.Continue
+    Ast.Kentinue
   | Token.PASS ->
     ignore (advance st);
     skip_newlines st;

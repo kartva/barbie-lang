@@ -1,8 +1,5 @@
 (** Interpreter/evaluator for Barbie-lang *)
 
-exception Runtime_error of string
-exception Break_signal
-exception Continue_signal
 type value =
   | VNum of float
   | VStr of string
@@ -13,7 +10,11 @@ type value =
 
 and env = value Map.Make(String).t
 
+exception Runtime_error of string
+exception Break_signal
+exception Kentinue_signal
 exception Return_signal of value
+
 
 module Env = Map.Make(String)
 
@@ -175,7 +176,7 @@ and eval_stmt (env : env) (stmt : Ast.stmt) : env =
         let next_env =
           try eval_block_to_env current_env body
           with Break_signal -> raise Break_signal
-             | Continue_signal -> current_env
+             | Kentinue_signal -> current_env
         in
         loop next_env
       else current_env
@@ -191,7 +192,7 @@ and eval_stmt (env : env) (stmt : Ast.stmt) : env =
         let next_env =
           try eval_block_to_env current_env body
           with Break_signal -> raise Break_signal
-             | Continue_signal -> current_env
+             | Kentinue_signal -> current_env
         in
         loop next_env (i + 1)
       else current_env
@@ -208,7 +209,7 @@ and eval_stmt (env : env) (stmt : Ast.stmt) : env =
         let next_env =
           try eval_block_to_env env_with_var body
           with Break_signal -> raise Break_signal
-             | Continue_signal -> env_with_var
+             | Kentinue_signal -> env_with_var
         in
         loop next_env (i + 1)
       else current_env
@@ -222,7 +223,7 @@ and eval_stmt (env : env) (stmt : Ast.stmt) : env =
     let v = eval_expr env e in
     raise (Return_signal v)
   | Ast.Kenough -> raise Break_signal
-  | Ast.Continue -> raise Continue_signal
+  | Ast.Kentinue -> raise Kentinue_signal
   | Ast.Pass -> env
 
 and eval_block env stmts =

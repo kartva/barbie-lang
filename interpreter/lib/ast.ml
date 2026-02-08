@@ -37,7 +37,7 @@ type stmt =
     (** return <expr> *)
   | Kenough
     (** break *)
-  | Continue
+  | Kentinue
   | Pass
 
 type program = stmt list

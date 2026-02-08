@@ -152,7 +152,7 @@ barbieGenerator.forBlock['controls_flow_statements'] = function(block) {
   if (block.getFieldValue('FLOW') === 'BREAK') {
     return 'kenough\n';
   } else {
-    return 'continue\n';
+    return 'kentinue\n';
   }
 };
 
@@ -246,8 +246,8 @@ barbieGenerator.forBlock['procedures_defnoreturn'] = function(block) {
     branch = barbieGenerator.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + block.id + '\'') + branch;
   }
-  const returnValue = barbieGenerator.valueToCode(block, 'RETURN',
-      barbieGenerator.Order.NONE) || '';
+  const returnValue = block.getInput('RETURN') ? barbieGenerator.valueToCode(block, 'RETURN',
+      barbieGenerator.Order.NONE) : '';
   let returnStr = '';
   if (returnValue) {
     returnStr = barbieGenerator.INDENT + 'gift ' + returnValue + '\n';
